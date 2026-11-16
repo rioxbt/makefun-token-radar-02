@@ -11,7 +11,7 @@
 // Outside the grader's container, MAKEFUN_OUTPUT_DIR stands in for /output:
 //   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts --input ../input/snapshot.json
 
-import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
+import { chmodSync, copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { boardIssue, buildRadar, dataScript, parseSnapshot, usd } from './lib/model.ts';
@@ -64,7 +64,11 @@ function copyFiles(from: string, to: string): string[] {
     if (name.startsWith('.')) continue;
     const path = join(from, name);
     if (!statSync(path).isFile()) continue;
-    copyFileSync(path, join(to, name));
+    const dest = join(to, name);
+    copyFileSync(path, dest);
+    // The repository is read-only in the grader, and a copy keeps its mode: give the copy back the
+    // mode an ordinary file has, so a run repeated into the same output directory can overwrite it.
+    chmodSync(dest, 0o644);
     copied.push(name);
   }
   return copied;
