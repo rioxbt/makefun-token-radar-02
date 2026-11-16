@@ -114,7 +114,7 @@ than Node 22.18 the TypeScript entrypoint needs `--experimental-strip-types`.
 
 ## The dashboard
 
-`dashboard/` is three files, 40,394 bytes in all — `index.html`, `app.css`, `app.js` — no framework,
+`dashboard/` is three files, 40,318 bytes in all — `index.html`, `app.css`, `app.js` — no framework,
 no webfont, no network call, rendering from the `data.js` the program writes beside it. It carries:
 
 - the board, sortable by implied value, TVL, seven-day growth, age or multiple, with a search box, a
