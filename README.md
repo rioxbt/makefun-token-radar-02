@@ -90,10 +90,13 @@ The board's top ten, as this snapshot's bytes rank them (TVL and implied value i
 | 9 | Mellow Core | Onchain Capital Allocator | $233M | 0.107× | $23,454,383 | $7.3M – $96.4M |
 | 10 | Upshift | Onchain Capital Allocator | $499M | 0.074× | $23,328,174 | $7.3M – $95.9M |
 
-The board holds 198 rows: the whole 40-protocol watchlist (the floor, never the ceiling) and 138
-pre-token protocols below it, across 33 categories. Protocols that record a token are never ranked;
-they appear in the dashboard's *Live token cohort* tab with the market's own market cap, which is the
-evidence the multiple is fitted from.
+The board holds 198 rows: the whole 40-protocol watchlist (the floor, never the ceiling), 138 pre-token
+protocols below the floor, and 20 more at or above it that the house's own list leaves out — each of
+them records no token, and the snapshot does not carry DefiLlama's `parentProtocol`, which the house's
+rule reads, so this entry reads them as subjects and says so rather than pretending to know. They span
+33 categories, and protocols that record a token are never ranked: they appear in the dashboard's
+*Live token cohort* tab with the market's own market cap, which is the evidence the multiple is fitted
+from.
 
 ## Run it
 
@@ -104,8 +107,10 @@ mkdir -p out && node main.ts --input /input/snapshot.json --output out
 `main.ts` reads the sealed snapshot (`/input/snapshot.json`, or `--input`), writes `out/board.json`,
 `out/data.js`, `out/dashboard/`, `out/screenshots/` and `out/dossier.json`. Standard library only, no
 network, no clock, no randomness: two runs on the same bytes write the same bytes (checked, board and
-dossier sha256 identical). A full run takes 0.54 s and 1.4 MB of output, well inside the grader's 120 s
-and 1 GB. On a runtime older than Node 22.18 the TypeScript entrypoint needs `--experimental-strip-types`.
+dossier sha256 identical, and a second run into the same output directory succeeds as well). A full run
+takes about half a second and writes 3.7 MB — board 773,206 bytes, data.js 457,685, dashboard 40,318,
+screenshots 1,047,183, dossier 1,438,625 — well inside the grader's 120 s and 1 GB. On a runtime older
+than Node 22.18 the TypeScript entrypoint needs `--experimental-strip-types`.
 
 ## The dashboard
 
@@ -138,13 +143,17 @@ category and a chain, 28 of 198 shown). Each was rendered from `dashboard/` in a
 
 ## The gate, checked locally
 
-The competition's own scorer stays on the server (`grade-local` refuses this kit), so the seven rows
-were reproduced against the sealed reference: dashboard files within 400 files, 4 MiB and no network
-address; 198 board rows, all snapshot slugs, ranks exactly 1..198 and implied values not rising as
-rank ascends; all 40 watchlist slugs covered; 131 to 341 characters a farm step, 7 steps a row; four
-screenshots at 1440×900, each under 512 KiB, with the middle half of the cohort under every value; and
-`dossier.json` byte for byte as `buildDossier('/output', {text_max_bytes: 65536})` writes it —
-1,437,654 bytes, text 40,662 bytes, all three dashboard files shown whole.
+The competition's own scorer stays on the server (`grade-local` refuses this kit), so the gate was
+checked twice over locally. The kit's own `makefun check` — the site's pre-submit checks — reports
+**13 passed, 0 failed, 6 skipped, 5 left to the site at submission**, its skips being the ones this
+machine cannot run (no `--dotenv`, an unsigned entry, no fixed task terms, no beacon root on a GitHub
+repository). And the seven rows were reproduced from the rules against the sealed reference: dashboard
+files within 400 files, 4 MiB and no network address (3 files, 40,318 bytes); 198 board rows, every
+slug one of the snapshot's, ranks exactly 1..198 and implied values not rising as rank ascends; all 40
+watchlist slugs covered; 131 to 341 characters a farm step, 7 steps a row; four screenshots at
+1440×900, each under 512 KiB and a whole PNG; and `dossier.json` byte for byte as
+`buildDossier('/output', {text_max_bytes: 65536})` writes it — 1,438,625 bytes, text 40,586 bytes,
+all three dashboard files shown whole, the cover `1-board.png`.
 
 ## Layout
 
