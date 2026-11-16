@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Launch Radar: pre-token protocols ranked by implied launch value</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<a class="skip" href="#board">Skip to the board</a>
+<header class="top">
+  <div class="brand">
+    <span class="mark" aria-hidden="true"></span>
+    <span class="brandtext">
+      <strong>Token Launch Radar</strong>
+      <span class="sub">pre-token protocols, ranked by what a launch would be worth</span>
+    </span>
+  </div>
+  <div class="meta" id="head-meta"></div>
+</header>
+<noscript><p class="empty">This dashboard renders from <code>data.js</code>, which the entry's program writes beside the page; it needs JavaScript on.</p></noscript>
+<main id="board" tabindex="-1">
+  <section class="stats" id="stats" aria-label="Headline figures"></section>
+  <details class="modelcard" id="modelcard" aria-label="The value model and its calibration"></details>
+  <section class="panel" aria-label="The board">
+    <div class="panelhead">
+      <div class="tabs" role="tablist" id="tabs">
+        <button class="tab on" role="tab" aria-selected="true" data-view="board">Pre-token board</button>
+        <button class="tab" role="tab" aria-selected="false" data-view="live">Live token cohort</button>
+      </div>
+      <div class="shown" id="shown"></div>
+    </div>
+    <div class="controls" id="controls">
+      <label class="field grow"><span>Catch a protocol</span>
+        <input id="q" type="search" placeholder="name, slug, category or chain" autocomplete="off">
+      </label>
+      <label class="field"><span>Category</span><select id="cat"></select></label>
+      <label class="field"><span>Chain</span><select id="chain"></select></label>
+      <label class="field"><span>Floor</span><select id="floor">
+        <option value="any">any TVL</option>
+        <option value="watchlist">watchlist only</option>
+        <option value="over">over the $50M floor</option>
+        <option value="under">under the floor</option>
+      </select></label>
+      <label class="field"><span>Order</span><select id="order">
+        <option value="implied">implied value</option>
+        <option value="tvl">TVL</option>
+        <option value="growth">7d growth</option>
+        <option value="age">age without a token</option>
+        <option value="multiple">launch multiple</option>
+      </select></label>
+      <button id="reset" class="ghost" type="button">Reset</button>
+    </div>
+    <div class="tablewrap">
+      <table id="table"><thead id="thead"></thead><tbody id="tbody"></tbody></table>
+    </div>
+    <p class="empty" id="empty" hidden>Nothing matches that filter. Widen it, or press Reset.</p>
+  </section>
+  <section class="panel livepanel" id="livepanel" hidden aria-label="Protocols whose token already trades">
+    <p class="note">These protocols record a token, so their value is not the model's to claim: the market's own
+      market cap and the multiple it trades at, in order, are the evidence the pre-token board's multiple is fitted
+      from. They are never ranked with the board. The calibration reads the <span id="cohort-n"></span> of them that
+      also record a TVL and a market cap.</p>
+    <div class="tablewrap">
+      <table id="livetable"><thead id="livethead"></thead><tbody id="livebody"></tbody></table>
+    </div>
+  </section>
+</main>
+<aside class="drawer" id="drawer" hidden aria-label="Protocol detail"></aside>
+<footer class="foot">
+  <p><strong>How this was built.</strong> One Node 22 program, <code>main.ts</code>, reads the sealed snapshot and
+    writes this page's figures, the ranked board and the judge's dossier; the page itself is static, one CSS file and
+    one script, no framework and no network. The model card above prints every constant it used.</p>
+  <p id="foot-src"></p>
+  <p class="disclaimer">An implied value is this entry's own claim, never make.fun's, and not advice: a protocol here
+    may still hold a token its DefiLlama record does not carry. Farming costs capital and carries loss.</p>
+</footer>
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
